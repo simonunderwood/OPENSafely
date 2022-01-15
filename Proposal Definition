@@ -11,15 +11,13 @@ study = StudyDefinition(
 
     # define the study population
     population=patients.satisfying(
-        '(has_RA OR has_PA OR has_UC) AND (has_diabetes OR has_CAD OR (age > "65") OR (smokingstatus = "S" OR smokingstatus = "E"))',
-        
+        '(registered = "1") AND (has_RA OR has_PA OR has_UC) AND (has_diabetes OR has_CAD OR (age > "65") OR (smokingstatus = "S" OR smokingstatus = "E"))',
         has_RA=patients.with_these_clinical_events(
             RA_codes, on_or_before="index_date"),
         has_PA=patients.with_these_clinical_events(
             RPA_codes, on_or_before="index_date"),
         has_UC=patients.with_these_clinical_events(
             UC_codes, on_or_before="index_date"),
-        
         has_diabetes=patients.with_these_clinical_events(
             (diabetes_t1_codes OR diabetes_t2_codes), on_or_before_"index_date"),
         has_CAD=patients.with_these_clinical_events(
@@ -32,6 +30,10 @@ study = StudyDefinition(
             ),
         ),
         
+        registered=patients.registered_as_of(
+        "index_date",
+        return_expectations={"incidence":0.98}
+        ),
         smoking_status=patients.categorised_as(
         {
             "S": "most_recent_smoking_code = 'S'",
