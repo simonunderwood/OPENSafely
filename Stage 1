@@ -28,7 +28,7 @@ GROUP BY month, region
 # Denominator
 
 SELECT
-     CAST(month AS DATE) AS month,
+     CAST(index_date AS DATE) AS month,
      region,
      SUM(population / 100.0) AS denominator
  FROM opensafely_total_UC_RA_PA
